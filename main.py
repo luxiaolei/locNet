@@ -6,9 +6,11 @@ from gnet import GNet
 from locnet import LocNet
 
 from numpy.random import randint
+from scipy.misc import imresize
 
 from utils import img_with_bbox
 
+import matplotlib.pylab as plt
 import numpy as np 
 import tensorflow as tf
 
@@ -169,6 +171,12 @@ else:
         pre_loc = sess.run(locnet.logit, feed_dict=fd)
         print(time.time() - t_enter, 'test time!')
         pre_loc = pre_loc[0]
+        for k,p in enumerate(pre_loc):
+            p = int(p)
+            if p > 224:
+                print('outbound warning!', p)
+                pre_loc[k] = 224
+                
         print('pre: ', [int(i) for i in pre_loc], 'actual: ', gt_cur)
         # Draw bbox on image. And print associated IoU score.
         img_bbox = img_with_bbox(img, pre_loc,c=1)
