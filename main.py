@@ -41,6 +41,8 @@ GT_PATH = os.path.join(DATA_ROOT, 'groundtruth_rect.txt')
 VGG_WEIGHTS_PATH = 'vgg16_weights.npz'
 
 TB_SUMMARY = os.path.join('tb_summary', FLAGS.model_name)
+if not os.path.isdir('tb_summary'):
+    os.mkdir('tb_summary')
 if not os.path.isdir(TB_SUMMARY):
     os.mkdir(TB_SUMMARY)
 
@@ -65,8 +67,7 @@ print('Reading the first image...')
 ## Instantiate inputProducer and retrive the first img
 # with associated ground truth. 
 inputProducer = InputProducer(IMG_PATH, GT_PATH)
-img, gt, s  = next(inputProducer.gen_img)
-roi_t0, _, rz_factor = inputProducer.extract_roi(img, gt)
+img, gt, _  = next(inputProducer.gen_img)
 
 # Register ops and tensors
 sess, vgg = init_vgg()
